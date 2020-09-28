@@ -17,19 +17,24 @@
            GOBACK.
        FIZZ SECTION.
            DISPLAY GOAL
-           SUBTRACT 1 FROM GOAL
            PERFORM GOAL TIMES
              ADD 1 TO CURRENT
              PERFORM PRINT
+           END-PERFORM
            GOBACK.
 
        PRINT SECTION.
            IF FUNCTION MOD(CURRENT,3) = 0 THEN
-             DISPLAY 'FIZZ'
+             DISPLAY 'FIZZ' WITH NO ADVANCING
            END-IF
            IF FUNCTION MOD(CURRENT,5) = 0 THEN
-             DISPLAY 'BUZZ'
+             DISPLAY 'BUZZ' WITH NO ADVANCING
            END-IF
-           IF FUNCTION MOD(CURRENT,3) > 0 AND FUNCTION MOD(CURRENT,5) > 0 THEN
+           IF FUNCTION MOD(CURRENT,3) > 0 AND 
+              FUNCTION MOD(CURRENT,5) > 0 THEN
              DISPLAY CURRENT
-           GOBACK.
+           ELSE
+      *      Newline
+             DISPLAY ''
+           END-IF
+           .

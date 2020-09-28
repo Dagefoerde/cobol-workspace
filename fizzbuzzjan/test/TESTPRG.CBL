@@ -27,6 +27,13 @@
            PERFORM UT-BEFORE
            PERFORM FIZZ
            Display 'Das ist ein Testcase'
+           ADD 1 TO UT-TEST-CASE-COUNT
+           SET UT-NORMAL-COMPARE TO TRUE
+           MOVE CURRENT TO UT-ACTUAL
+           MOVE 100
+                       TO UT-EXPECTED
+           SET UT-COMPARE-DEFAULT TO TRUE
+           PERFORM UT-ASSERT-EQUAL
 
            PERFORM UT-AFTER
            MOVE 'Alternativer Testcase'
@@ -35,6 +42,13 @@
            MOVE 20 TO GOAL
            PERFORM FIZZ
            Display 'Das ist ein Testcase'
+           ADD 1 TO UT-TEST-CASE-COUNT
+           SET UT-NORMAL-COMPARE TO TRUE
+           MOVE CURRENT TO UT-ACTUAL
+           MOVE 20
+                       TO UT-EXPECTED
+           SET UT-COMPARE-DEFAULT TO TRUE
+           PERFORM UT-ASSERT-EQUAL
            PERFORM UT-AFTER
             COPY ZUTZCPD     .
            .
@@ -55,21 +69,26 @@
            .
        FIZZ SECTION.
            DISPLAY GOAL
-           SUBTRACT 1 FROM GOAL
            PERFORM GOAL TIMES
              ADD 1 TO CURRENT
              PERFORM PRINT
+           END-PERFORM
            GOBACK
 
            .
        PRINT SECTION.
            IF FUNCTION MOD(CURRENT,3) = 0 THEN
-             DISPLAY 'FIZZ'
+             DISPLAY 'FIZZ' WITH NO ADVANCING
            END-IF
            IF FUNCTION MOD(CURRENT,5) = 0 THEN
-             DISPLAY 'BUZZ'
+             DISPLAY 'BUZZ' WITH NO ADVANCING
            END-IF
-           IF FUNCTION MOD(CURRENT,3) > 0 AND FUNCTION MOD(CURRENT,5) > 0 THEN
+           IF FUNCTION MOD(CURRENT,3) > 0 AND
+              FUNCTION MOD(CURRENT,5) > 0 THEN
              DISPLAY CURRENT
-           GOBACK
+           ELSE
+      *      Newline
+             DISPLAY ''
+           END-IF
+
            .
