@@ -34,8 +34,7 @@
       *    Initializations.
            INITIALIZE CURRENTLINE
            COMPUTE CURRENTDIFF = GOALNUMBER - CURRENTNUMBER
-           COMPUTE CURRENTEND = GOALNUMBER * 2 - 1 - CURRENTDIFF
-           ADD 1 TO CURRENTDIFF
+           COMPUTE CURRENTEND = GOALNUMBER * 2 - CURRENTDIFF
       *    Transform.
            PERFORM NUMBERTOLETTER
       *    Construct output line.

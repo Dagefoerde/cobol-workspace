@@ -35,6 +35,7 @@
                        TO UT-EXPECTED
            SET UT-COMPARE-DEFAULT TO TRUE
            PERFORM UT-ASSERT-EQUAL
+
            PERFORM UT-AFTER
            MOVE 'Zeile B für D'
                TO UT-TEST-CASE-NAME
@@ -50,6 +51,7 @@
                        TO UT-EXPECTED
            SET UT-COMPARE-DEFAULT TO TRUE
            PERFORM UT-ASSERT-EQUAL
+
            PERFORM UT-AFTER
            MOVE 'Zeile D für D'
                TO UT-TEST-CASE-NAME
@@ -65,6 +67,7 @@
                        TO UT-EXPECTED
            SET UT-COMPARE-DEFAULT TO TRUE
            PERFORM UT-ASSERT-EQUAL
+
            PERFORM UT-AFTER
            MOVE 'Zeile E für E'
                TO UT-TEST-CASE-NAME
@@ -146,10 +149,8 @@
        GETLINE SECTION.
       *    Initializations
            INITIALIZE CURRENTLINE
-           MOVE GOALNUMBER TO CURRENTDIFF
-           SUBTRACT CURRENTNUMBER FROM CURRENTDIFF
-           COMPUTE CURRENTEND = GOALNUMBER * 2 - 1 - CURRENTDIFF
-           ADD 1 TO CURRENTDIFF
+           COMPUTE CURRENTDIFF = GOALNUMBER - CURRENTNUMBER
+           COMPUTE CURRENTEND = GOALNUMBER * 2 - CURRENTDIFF
       *    Transform
            PERFORM NUMBERTOLETTER
       *    Construct output line

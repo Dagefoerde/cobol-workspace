@@ -6,18 +6,21 @@
                PERFORM GOALTONUMBER
                PERFORM GETLINE
            EXPECT CURRENTLINE TO BE "   A   "
+
            TESTCASE 'Zeile B für D'
                MOVE "D" TO GOALLETTER
                MOVE 2 TO CURRENTNUMBER
                PERFORM GOALTONUMBER
                PERFORM GETLINE
            EXPECT CURRENTLINE TO BE "  B B  "
+
            TESTCASE 'Zeile D für D'
                MOVE "D" TO GOALLETTER
                MOVE 4 TO CURRENTNUMBER
                PERFORM GOALTONUMBER
                PERFORM GETLINE
            EXPECT CURRENTLINE TO BE "D     D"
+               
            TESTCASE 'Zeile E für E'
                MOVE "E" TO GOALLETTER
                MOVE 5 TO CURRENTNUMBER
