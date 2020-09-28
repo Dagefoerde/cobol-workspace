@@ -17,11 +17,12 @@
            GOBACK.
        FIZZ SECTION.
            DISPLAY GOAL
+           MOVE 000 TO CURRENT
            PERFORM GOAL TIMES
              ADD 1 TO CURRENT
              PERFORM PRINT
            END-PERFORM
-           GOBACK.
+           .
 
        PRINT SECTION.
            IF FUNCTION MOD(CURRENT,3) = 0 THEN

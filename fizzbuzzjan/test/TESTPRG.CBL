@@ -19,14 +19,13 @@
            DISPLAY SPACE
            DISPLAY "TEST SUITE:"
            DISPLAY
-           'Beispiel Testsuite'
+           'Fizzbuzz Testsuite'
            DISPLAY SPACE
 
-           MOVE 'Beispiel Testcase'
+           MOVE 'Goal is default'
                TO UT-TEST-CASE-NAME
            PERFORM UT-BEFORE
            PERFORM FIZZ
-           Display 'Das ist ein Testcase'
            ADD 1 TO UT-TEST-CASE-COUNT
            SET UT-NORMAL-COMPARE TO TRUE
            MOVE CURRENT TO UT-ACTUAL
@@ -36,16 +35,15 @@
            PERFORM UT-ASSERT-EQUAL
 
            PERFORM UT-AFTER
-           MOVE 'Alternativer Testcase'
+           MOVE 'Goal is 20'
                TO UT-TEST-CASE-NAME
            PERFORM UT-BEFORE
-           MOVE 20 TO GOAL
+           MOVE 020 TO GOAL
            PERFORM FIZZ
-           Display 'Das ist ein Testcase'
            ADD 1 TO UT-TEST-CASE-COUNT
            SET UT-NORMAL-COMPARE TO TRUE
            MOVE CURRENT TO UT-ACTUAL
-           MOVE 20
+           MOVE 020
                        TO UT-EXPECTED
            SET UT-COMPARE-DEFAULT TO TRUE
            PERFORM UT-ASSERT-EQUAL
@@ -69,11 +67,12 @@
            .
        FIZZ SECTION.
            DISPLAY GOAL
+           MOVE 000 TO CURRENT
            PERFORM GOAL TIMES
              ADD 1 TO CURRENT
              PERFORM PRINT
            END-PERFORM
-           GOBACK
+
 
            .
        PRINT SECTION.
