@@ -10,8 +10,10 @@
        FILE-CONTROL.
        DATA DIVISION.
        WORKING-STORAGE SECTION.
-       01  GOAL      PIC 999 VALUE 100.
-       01  CURRENT   PIC 999.
+       01  GOAL                          PIC 999 VALUE 100.
+       01  CURRENT                       PIC 999.
+       01  CURRENTSTR REDEFINES CURRENT  PIC A(3).
+       01  CALC-RESULT                   PIC A(8).
        PROCEDURE DIVISION.
            PERFORM FIZZ
            GOBACK.
@@ -25,17 +27,24 @@
            .
 
        PRINT SECTION.
-           IF FUNCTION MOD(CURRENT,3) = 0 THEN
-             DISPLAY 'FIZZ' WITH NO ADVANCING
-           END-IF
-           IF FUNCTION MOD(CURRENT,5) = 0 THEN
-             DISPLAY 'BUZZ' WITH NO ADVANCING
-           END-IF
+           PERFORM CALC
+           DISPLAY CALC-RESULT
+           .
+       
+       CALC SECTION.
+           MOVE '        ' TO CALC-RESULT
            IF FUNCTION MOD(CURRENT,3) > 0 AND 
               FUNCTION MOD(CURRENT,5) > 0 THEN
-             DISPLAY CURRENT
+             MOVE CURRENTSTR TO CALC-RESULT
            ELSE
-      *      Newline
-             DISPLAY ''
+             IF FUNCTION MOD(CURRENT,3) = 0 AND 
+                FUNCTION MOD(CURRENT,5) = 0 THEN
+               MOVE 'FIZZBUZZ' TO CALC-RESULT
+             ELSE IF FUNCTION MOD(CURRENT,3) = 0 THEN
+               MOVE 'FIZZ' TO CALC-RESULT
+             ELSE IF FUNCTION MOD(CURRENT,5) = 0 THEN
+               MOVE 'BUZZ' TO CALC-RESULT
+             END-IF
            END-IF
            .
+

@@ -11,8 +11,10 @@
        DATA DIVISION.
        WORKING-STORAGE SECTION.
             COPY ZUTZCWS     .
-       01  GOAL      PIC 999 VALUE 100.
-       01  CURRENT   PIC 999.
+       01  GOAL                          PIC 999 VALUE 100.
+       01  CURRENT                       PIC 999.
+       01  CURRENTSTR REDEFINES CURRENT  PIC A(3).
+       01  CALC-RESULT                   PIC A(8).
        PROCEDURE DIVISION.
            PERFORM UT-INITIALIZE
 
@@ -47,6 +49,62 @@
                        TO UT-EXPECTED
            SET UT-COMPARE-DEFAULT TO TRUE
            PERFORM UT-ASSERT-EQUAL
+
+           PERFORM UT-AFTER
+           MOVE '001 is literal'
+               TO UT-TEST-CASE-NAME
+           PERFORM UT-BEFORE
+           MOVE 001 TO CURRENT
+           PERFORM CALC
+           ADD 1 TO UT-TEST-CASE-COUNT
+           SET UT-NORMAL-COMPARE TO TRUE
+           MOVE CALC-RESULT TO UT-ACTUAL
+           MOVE '001'
+                       TO UT-EXPECTED
+           SET UT-COMPARE-DEFAULT TO TRUE
+           PERFORM UT-ASSERT-EQUAL
+
+           PERFORM UT-AFTER
+           MOVE '003 is fizz'
+               TO UT-TEST-CASE-NAME
+           PERFORM UT-BEFORE
+           MOVE 003 TO CURRENT
+           PERFORM CALC
+           ADD 1 TO UT-TEST-CASE-COUNT
+           SET UT-NORMAL-COMPARE TO TRUE
+           MOVE CALC-RESULT TO UT-ACTUAL
+           MOVE 'FIZZ'
+                       TO UT-EXPECTED
+           SET UT-COMPARE-DEFAULT TO TRUE
+           PERFORM UT-ASSERT-EQUAL
+
+           PERFORM UT-AFTER
+           MOVE '005 is buzz'
+               TO UT-TEST-CASE-NAME
+           PERFORM UT-BEFORE
+           MOVE 005 TO CURRENT
+           PERFORM CALC
+           ADD 1 TO UT-TEST-CASE-COUNT
+           SET UT-NORMAL-COMPARE TO TRUE
+           MOVE CALC-RESULT TO UT-ACTUAL
+           MOVE 'BUZZ'
+                       TO UT-EXPECTED
+           SET UT-COMPARE-DEFAULT TO TRUE
+           PERFORM UT-ASSERT-EQUAL
+
+           PERFORM UT-AFTER
+           MOVE '090 is fizzbuzz'
+               TO UT-TEST-CASE-NAME
+           PERFORM UT-BEFORE
+           MOVE 090 TO CURRENT
+           PERFORM CALC
+           ADD 1 TO UT-TEST-CASE-COUNT
+           SET UT-NORMAL-COMPARE TO TRUE
+           MOVE CALC-RESULT TO UT-ACTUAL
+           MOVE 'FIZZBUZZ'
+                       TO UT-EXPECTED
+           SET UT-COMPARE-DEFAULT TO TRUE
+           PERFORM UT-ASSERT-EQUAL
            PERFORM UT-AFTER
             COPY ZUTZCPD     .
            .
@@ -76,18 +134,27 @@
 
            .
        PRINT SECTION.
-           IF FUNCTION MOD(CURRENT,3) = 0 THEN
-             DISPLAY 'FIZZ' WITH NO ADVANCING
-           END-IF
-           IF FUNCTION MOD(CURRENT,5) = 0 THEN
-             DISPLAY 'BUZZ' WITH NO ADVANCING
-           END-IF
-           IF FUNCTION MOD(CURRENT,3) > 0 AND
-              FUNCTION MOD(CURRENT,5) > 0 THEN
-             DISPLAY CURRENT
-           ELSE
-      *      Newline
-             DISPLAY ''
-           END-IF
+           PERFORM CALC
+           DISPLAY CALC-RESULT
+
 
            .
+       CALC SECTION.
+           MOVE '        ' TO CALC-RESULT
+           IF FUNCTION MOD(CURRENT,3) > 0 AND
+              FUNCTION MOD(CURRENT,5) > 0 THEN
+             MOVE CURRENTSTR TO CALC-RESULT
+           ELSE
+             IF FUNCTION MOD(CURRENT,3) = 0 AND
+                FUNCTION MOD(CURRENT,5) = 0 THEN
+               MOVE 'FIZZBUZZ' TO CALC-RESULT
+             ELSE IF FUNCTION MOD(CURRENT,3) = 0 THEN
+               MOVE 'FIZZ' TO CALC-RESULT
+             ELSE IF FUNCTION MOD(CURRENT,5) = 0 THEN
+               MOVE 'BUZZ' TO CALC-RESULT
+             END-IF
+           END-IF
+
+
+           .
+
