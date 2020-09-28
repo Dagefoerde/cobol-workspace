@@ -13,8 +13,8 @@
             COPY ZUTZCWS     .
        01  GOAL                          PIC 999 VALUE 100.
        01  CURRENT                       PIC 999.
-       01  CURRENTSTR REDEFINES CURRENT  PIC A(3).
-       01  CALC-RESULT                   PIC A(8).
+       01  CURRENTSTR REDEFINES CURRENT  PIC Z(3).
+       01  CALC-RESULT                   PIC X(8) VALUE SPACE.
        PROCEDURE DIVISION.
            PERFORM UT-INITIALIZE
 
@@ -125,9 +125,9 @@
            .
        FIZZ SECTION.
            DISPLAY GOAL
-           MOVE 000 TO CURRENT
-           PERFORM GOAL TIMES
-             ADD 1 TO CURRENT
+           INITIALIZE CURRENT
+           PERFORM VARYING CURRENT FROM 1 BY 1
+             UNTIL CURRENT = GOAL
              PERFORM PRINT
            END-PERFORM
 
@@ -140,7 +140,7 @@
 
            .
        CALC SECTION.
-           MOVE '        ' TO CALC-RESULT
+           INITIALIZE CALC-RESULT
            IF FUNCTION MOD(CURRENT,3) > 0 AND
               FUNCTION MOD(CURRENT,5) > 0 THEN
              MOVE CURRENTSTR TO CALC-RESULT
