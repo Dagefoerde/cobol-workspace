@@ -26,6 +26,7 @@
                88 WINX VALUE 1.
                88 WINO VALUE 2.
                88 BOARDFULL VALUE 3.
+       01  CHECKIDX PIC 9.
        PROCEDURE DIVISION.
            MOVE SPACES TO BOARD
            PERFORM UNTIL NOT RUNNING
@@ -37,7 +38,17 @@
                PERFORM CHECKFULL
              END-IF
            END-PERFORM
-           STOP RUN.
+
+           EVALUATE TRUE
+           WHEN BOARDFULL
+               DISPLAY "Everyone loses as the board is full."
+           WHEN WINX
+               DISPLAY "Player X wins!"
+           WHEN WINO
+               DISPLAY "Player O wins!"
+           END-EVALUATE
+
+           GOBACK.
 
        DOMOVE SECTION.
            MOVE PLAYER TO COMMAND(1:1)
@@ -63,16 +74,41 @@
            .
 
        CHECKFULL Section.
-           MOVE 0 to EMPTYFIELDS
+           INITIALIZE EMPTYFIELDS
            INSPECT BOARD TALLYING EMPTYFIELDS FOR ALL SPACES
            IF EMPTYFIELDS EQUALS 0 THEN
-               DISPLAY "Everyone loses as the board is full."
                SET BOARDFULL TO TRUE
            END-IF
            .
        
        CHECKWIN Section.
-           DISPLAY "Win?"
+           EVALUATE TRUE
+           WHEN X(1,1) AND X(2,2) AND X(3,3)
+             SET WINX TO TRUE
+           WHEN X(3,1) AND X(2,2) AND X(1,3)
+             SET WINX TO TRUE
+           WHEN O(1,1) AND O(2,2) AND O(3,3)
+             SET WINO TO TRUE
+           WHEN O(3,1) AND O(2,2) AND O(1,3)
+             SET WINO TO TRUE
+           WHEN OTHER
+             PERFORM CHECKWINROWS
+           END-EVALUATE
+           .
+       
+       CHECKWINROWS SECTION.
+           INITIALIZE CHECKIDX
+           PERFORM VARYING CHECKIDX FROM 1 BY 1 UNTIL CHECKIDX > 3
+               EVALUATE TRUE
+               WHEN X(CHECKIDX, 1) AND X(CHECKIDX, 2) AND X(CHECKIDX, 3)
+                   SET WINX TO TRUE
+               WHEN X(1, CHECKIDX) AND X(2, CHECKIDX) AND X(3, CHECKIDX)
+                   SET WINX TO TRUE
+               WHEN O(CHECKIDX, 1) AND O(CHECKIDX, 2) AND O(CHECKIDX, 3)
+                   SET WINO TO TRUE
+               WHEN O(1, CHECKIDX) AND O(2, CHECKIDX) AND O(3, CHECKIDX)
+                   SET WINO TO TRUE
+           END-PERFORM
            .
 
        DISPLAYBOARD SECTION.
