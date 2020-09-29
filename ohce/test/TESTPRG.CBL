@@ -9,11 +9,16 @@
        DATA DIVISION.
        WORKING-STORAGE SECTION.
             COPY ZUTZCWS     .
-       01  ORIGINAL   PIC X(20).
+       01  ORIGINAL.
+        05 ORIGINAL-BYTE OCCURS 20 PIC X.
        01  REVD    PIC X(20).
        01  PALINDROME PIC 9.
         88 ISPALINDROME VALUE 1.
        01  USERNAME   PIC X(20).
+       01  LEN        PIC 99.
+       01  READCHAR PIC 99.
+       01  WRITECHAR PIC 99.
+
        PROCEDURE DIVISION.
            PERFORM UT-INITIALIZE
 
@@ -74,6 +79,21 @@
            SET UT-NORMAL-COMPARE TO TRUE
            MOVE REVD TO UT-ACTUAL
            MOVE "😢A"
+                       TO UT-EXPECTED
+           SET UT-COMPARE-DEFAULT TO TRUE
+           PERFORM UT-ASSERT-EQUAL
+
+
+           PERFORM UT-AFTER
+           MOVE 'Reversing works with two-byte emoji'
+               TO UT-TEST-CASE-NAME
+           PERFORM UT-BEFORE
+           MOVE 'A🤷‍♂️' TO ORIGINAL
+           PERFORM DO-REVERSE
+           ADD 1 TO UT-TEST-CASE-COUNT
+           SET UT-NORMAL-COMPARE TO TRUE
+           MOVE REVD TO UT-ACTUAL
+           MOVE "🤷‍♂️A"
                        TO UT-EXPECTED
            SET UT-COMPARE-DEFAULT TO TRUE
            PERFORM UT-ASSERT-EQUAL
@@ -149,9 +169,31 @@
 
            .
        DO-REVERSE SECTION.
-           MOVE ORIGINAL TO REVD
+           INITIALIZE WRITECHAR
+           INITIALIZE REVD
+           PERFORM COUNT-LENGTH
+           PERFORM VARYING READCHAR FROM LEN BY -1 UNTIL READCHAR = 0
+             ADD 1 TO WRITECHAR
+             MOVE ORIGINAL-BYTE(READCHAR) TO REVD(WRITECHAR:1)
+           END-PERFORM
+
            .
        .
+
+           .
+       COUNT-LENGTH SECTION.
+      *    Courtesy of https://stackoverflow.com/a/24778914 🤷‍♂️
+           IF ORIGINAL EQUAL TO SPACE
+             MOVE ZERO TO LEN
+           ELSE
+             MOVE LENGTH OF ORIGINAL TO LEN
+             PERFORM
+             UNTIL ORIGINAL-BYTE ( LEN )
+               NOT EQUAL TO SPACE
+               SUBTRACT +1 FROM LEN
+             END-PERFORM
+           END-IF
+
 
            .
        DO-PALINDROME SECTION.

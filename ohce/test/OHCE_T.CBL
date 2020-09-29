@@ -20,6 +20,12 @@
            PERFORM DO-REVERSE
            EXPECT REVD TO BE "😢A"
 
+
+           TESTCASE 'Reversing works with two-byte emoji'
+           MOVE 'A🤷‍♂️' TO ORIGINAL
+           PERFORM DO-REVERSE
+           EXPECT REVD TO BE "🤷‍♂️A"
+
            TESTCASE 'Can discover a palindrome'
            MOVE 'ABBA' TO ORIGINAL
            PERFORM DO-REVERSE
