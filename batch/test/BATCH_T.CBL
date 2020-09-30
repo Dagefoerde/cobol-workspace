@@ -6,4 +6,4 @@
            EXPECT BANKID TO BE 47111
            EXPECT ACCOUNTID TO BE 1234567890
            EXPECT AMOUNT TO BE 00050000.00
-           EXPECT COMMENT TO BE "Testüberweisung"
+           EXPECT COMMENT TO BE "Testüberweisung".
