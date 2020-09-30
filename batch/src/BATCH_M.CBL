@@ -6,6 +6,9 @@
        SELECT TRANSACTION-IN ASSIGN TO "input.txt"
            ORGANIZATION IS LINE SEQUENTIAL       
            FILE STATUS IS TRANSACTION-IN-FILE-STATUS.
+       SELECT PROCESSING-OUT ASSIGN TO 'output.txt' 
+           ORGANIZATION IS LINE SEQUENTIAL
+           FILE STATUS IS PROCESSING-OUT-FILE-STATUS.
        DATA DIVISION.
        FILE SECTION.
        FD TRANSACTION-IN.
@@ -14,6 +17,10 @@
          05  ACCOUNTID-F PIC 9(10).
          05  AMOUNT-F    PIC Z(7)9V99.
          05  COMMENT-F   PIC X(55).
+       FD PROCESSING-OUT.
+       01  PROCESSING-OUT-F.
+         05  DESCRIPTION-F PIC X(21).
+         05  OUTSALDO-F    PIC Z(08)9.99.
        WORKING-STORAGE SECTION.
        01  TRANSACTION.
          05  BANKID      PIC 9(5).
@@ -22,14 +29,20 @@
          05  COMMENT     PIC X(55).
        01  READSTATUS    PIC X VALUE SPACE.
          88  EOF         VALUE "X".
-       01  TRANSACTION-IN-FILE-STATUS   PIC X(02).
+       01  FILE-STATUS.
+         05  TRANSACTION-IN-FILE-STATUS   PIC X(02).
+         05  PROCESSING-OUT-FILE-STATUS   PIC X(02).
        01  CURRENTBANK.
          05  CBID      PIC 9(5) VALUE 0.
          05  CBSALDO   PIC 9(8)V99 VALUE 0.
        01  CURRENTACCOUNT.
          05  CAID      PIC 9(10) VALUE 0.
          05  CASALDO   PIC 9(8)V99 VALUE 0.
+       01  ACCOUNTDESC PIC X(21) VALUE "Account XXXXXXXXXX:  ".
+       01  BANKDESC    PIC X(21) VALUE "Total EUR for XXXXX: ".
+
        PROCEDURE DIVISION.
+           OPEN OUTPUT PROCESSING-OUT
            OPEN INPUT TRANSACTION-IN
               PERFORM UNTIL EOF 
                  READ TRANSACTION-IN INTO TRANSACTION
@@ -39,6 +52,7 @@
               END-PERFORM
            CLOSE TRANSACTION-IN
            PERFORM CLOSE-BANK
+           CLOSE PROCESSING-OUT
            GOBACK
            .
        
@@ -67,6 +81,16 @@
            DISPLAY "Total EUR for " CBID ": " CBSALDO
            DISPLAY SPACE
 
+           MOVE CBID TO BANKDESC(15:5)
+           MOVE BANKDESC TO DESCRIPTION-F
+           MOVE CBSALDO TO OUTSALDO-F
+           WRITE PROCESSING-OUT-F FROM
+               "================================"
+           WRITE PROCESSING-OUT-F FROM PROCESSING-OUT-F
+
+
+           WRITE PROCESSING-OUT-F FROM SPACE
+
            INITIALIZE CURRENTBANK
            .
 
@@ -76,6 +100,10 @@
            END-IF
 
            DISPLAY "Account " CAID ":  " CASALDO
+           MOVE CAID TO ACCOUNTDESC(9:10)
+           MOVE ACCOUNTDESC TO DESCRIPTION-F
+           MOVE CASALDO TO OUTSALDO-F
+           WRITE PROCESSING-OUT-F FROM PROCESSING-OUT-F
 
            INITIALIZE CURRENTACCOUNT
            .
