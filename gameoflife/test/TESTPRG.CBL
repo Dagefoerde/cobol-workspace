@@ -104,6 +104,6 @@
 
                   END-PERFORM
            END-PERFORM
-      *    MOVE NEXTMATRIX TO MATRIX
+           MOVE NEXTMATRIX TO MATRIX
 
            .
