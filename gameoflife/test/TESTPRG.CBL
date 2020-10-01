@@ -9,8 +9,8 @@
        DATA DIVISION.
        WORKING-STORAGE SECTION.
             COPY ZUTZCWS     .
-           COPY 'matrix.cpy' REPLACING ==TAG-== BY ====.
-           COPY 'matrix.cpy' REPLACING ==TAG-== BY ==NM==.
+           COPY 'matrix.cpy' REPLACING ==TAG:== BY ====.
+           COPY 'matrix.cpy' REPLACING ==TAG:== BY ==NM==.
        01  INDEXES.
          05  ROWIDX PIC 99.
          05  COLIDX PIC 99.
