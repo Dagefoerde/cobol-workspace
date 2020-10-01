@@ -77,15 +77,16 @@
            END-IF
 
            PERFORM CLOSE-ACCOUNT
-           DISPLAY "================================"
-           DISPLAY "Total EUR for " CBID ": " CBSALDO
-           DISPLAY SPACE
+      *    DISPLAY "================================"
+      *    DISPLAY "Total EUR for " CBID ": " CBSALDO
+      *    DISPLAY SPACE
 
+           WRITE PROCESSING-OUT-F FROM
+               "================================="
+                   
            MOVE CBID TO BANKDESC(15:5)
            MOVE BANKDESC TO DESCRIPTION-F
            MOVE CBSALDO TO OUTSALDO-F
-           WRITE PROCESSING-OUT-F FROM
-               "================================"
            WRITE PROCESSING-OUT-F FROM PROCESSING-OUT-F
 
 
@@ -99,7 +100,7 @@
                EXIT SECTION
            END-IF
 
-           DISPLAY "Account " CAID ":  " CASALDO
+      *    DISPLAY "Account " CAID ":  " CASALDO
            MOVE CAID TO ACCOUNTDESC(9:10)
            MOVE ACCOUNTDESC TO DESCRIPTION-F
            MOVE CASALDO TO OUTSALDO-F
