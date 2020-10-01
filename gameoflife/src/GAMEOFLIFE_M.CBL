@@ -63,6 +63,8 @@
                         EVALUATE ALIVES
                         WHEN < 2
                           SET NMDEAD(ROWIDX,COLIDX) TO TRUE
+                        WHEN > 3
+                          SET NMDEAD(ROWIDX,COLIDX) TO TRUE
                         WHEN OTHER
                           SET NMALIVE(ROWIDX,COLIDX) TO TRUE
                         END-EVALUATE

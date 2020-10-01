@@ -149,7 +149,47 @@
            MOVE 'TRUE' TO UT-EXPECTED
            PERFORM  UT-ASSERT-EQUAL
 
-
+           PERFORM UT-AFTER
+           MOVE 'alive, drei lebende Nachbarn -> alive'
+               TO UT-TEST-CASE-NAME
+           PERFORM UT-BEFORE
+               SET ALIVE(5,4) TO TRUE
+               SET ALIVE(5,5) TO TRUE
+               SET ALIVE(5,6) TO TRUE
+               SET ALIVE(6,5) TO TRUE
+               PERFORM Tick
+           ADD 1 TO UT-TEST-CASE-COUNT
+           SET UT-NORMAL-COMPARE TO TRUE
+           MOVE UT-TEST-CASE-COUNT TO UT-TEST-CASE-NUMBER
+           SET UT-COMPARE-DEFAULT TO TRUE
+           IF ALIVE(5,5)
+           MOVE  'TRUE'  TO UT-ACTUAL
+           ELSE
+           MOVE  'FALSE'  TO UT-ACTUAL
+           END-IF
+           MOVE 'TRUE' TO UT-EXPECTED
+           PERFORM  UT-ASSERT-EQUAL
+           PERFORM UT-AFTER
+           MOVE 'alive, vier lebende Nachbarn -> dead'
+               TO UT-TEST-CASE-NAME
+           PERFORM UT-BEFORE
+               SET ALIVE(5,4) TO TRUE
+               SET ALIVE(5,5) TO TRUE
+               SET ALIVE(5,6) TO TRUE
+               SET ALIVE(6,5) TO TRUE
+               SET ALIVE(4,5) TO TRUE
+               PERFORM Tick
+           ADD 1 TO UT-TEST-CASE-COUNT
+           SET UT-NORMAL-COMPARE TO TRUE
+           MOVE UT-TEST-CASE-COUNT TO UT-TEST-CASE-NUMBER
+           SET UT-COMPARE-DEFAULT TO TRUE
+           IF DEAD(5,5)
+           MOVE  'TRUE'  TO UT-ACTUAL
+           ELSE
+           MOVE  'FALSE'  TO UT-ACTUAL
+           END-IF
+           MOVE 'TRUE' TO UT-EXPECTED
+           PERFORM  UT-ASSERT-EQUAL
            PERFORM UT-AFTER
            MOVE 'Row indexes wrap at upper bound'
                TO UT-TEST-CASE-NAME
@@ -323,6 +363,8 @@
                       ELSE
                         EVALUATE ALIVES
                         WHEN < 2
+                          SET NMDEAD(ROWIDX,COLIDX) TO TRUE
+                        WHEN > 3
                           SET NMDEAD(ROWIDX,COLIDX) TO TRUE
                         WHEN OTHER
                           SET NMALIVE(ROWIDX,COLIDX) TO TRUE

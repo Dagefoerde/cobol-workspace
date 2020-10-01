@@ -39,6 +39,23 @@
            EXPECT DEAD(5,4) TO BE TRUE
            EXPECT DEAD(5,5) TO BE TRUE
 
+           TESTCASE 'alive, drei lebende Nachbarn -> alive'
+               SET ALIVE(5,4) TO TRUE
+               SET ALIVE(5,5) TO TRUE
+               SET ALIVE(5,6) TO TRUE
+               SET ALIVE(6,5) TO TRUE
+               PERFORM Tick
+           EXPECT ALIVE(5,5) TO BE TRUE
+
+           TESTCASE 'alive, vier lebende Nachbarn -> dead'
+               SET ALIVE(5,4) TO TRUE
+               SET ALIVE(5,5) TO TRUE
+               SET ALIVE(5,6) TO TRUE
+               SET ALIVE(6,5) TO TRUE
+               SET ALIVE(4,5) TO TRUE
+               PERFORM Tick
+           EXPECT DEAD(5,5) TO BE TRUE
+
 
            TESTCASE 'Row indexes wrap at upper bound'
                MOVE 51 TO NEIGHBORROWIDX
