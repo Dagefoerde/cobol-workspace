@@ -42,6 +42,8 @@
            PERFORM UNTIL 2=1
                PERFORM Tick
                PERFORM Ausgabe
+      *>       Wait
+               call "CBL_GC_NANOSLEEP" using "500000000" end-call
            END-PERFORM
            .
 
@@ -126,5 +128,4 @@
            PERFORM VARYING ROWIDX FROM 1 UNTIL ROWIDX > 50
                DISPLAY MROW(ROWIDX)
            END-PERFORM
-           call "CBL_GC_NANOSLEEP" using "500000000" end-call
            .
