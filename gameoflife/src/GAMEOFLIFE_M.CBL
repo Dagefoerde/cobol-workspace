@@ -28,6 +28,7 @@
        01 NEIGHBOURS.
          05  NEIGHBOUR PIC 9 OCCURS 8.
        01  NEIGHBOURSIDX PIC 9.
+       01  ALIVES PIC 9.
        PROCEDURE DIVISION.
        
            PERFORM Init.
@@ -49,7 +50,15 @@
                UNTIL ROWIDX > 50  
                   PERFORM VARYING COLIDX FROM 1
                       UNTIL COLIDX > 50
+
                       PERFORM Collect-Neighbours.
+                      INITIALIZE ALIVES
+                      INSPECT NEIGHBOURS TALLYING ALIVES FOR ALL "1"
+                          
+                      EVALUATE ALIVES
+                      WHEN 3
+                        SET NMALIVE(ROWIDX,COLIDX) TO TRUE
+                      END-EVALUATE
                   END-PERFORM
            END-PERFORM
            MOVE NEXTMATRIX TO MATRIX

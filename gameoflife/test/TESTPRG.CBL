@@ -29,6 +29,7 @@
        01 NEIGHBOURS.
          05  NEIGHBOUR PIC 9 OCCURS 8.
        01  NEIGHBOURSIDX PIC 9.
+       01  ALIVES PIC 9.
        PROCEDURE DIVISION.
            PERFORM UT-INITIALIZE
 
@@ -204,6 +205,24 @@
                        TO UT-EXPECTED
            SET UT-COMPARE-DEFAULT TO TRUE
            PERFORM UT-ASSERT-EQUAL
+
+           PERFORM UT-AFTER
+           MOVE 'relevant neighbours are found (2)'
+               TO UT-TEST-CASE-NAME
+           PERFORM UT-BEFORE
+               SET ALIVE(5,4) TO TRUE
+               SET ALIVE(5,5) TO TRUE
+               SET ALIVE(5,6) TO TRUE
+               SET ROWIDX TO 6
+               SET COLIDX TO 5
+               PERFORM Collect-Neighbours
+           ADD 1 TO UT-TEST-CASE-COUNT
+           SET UT-NORMAL-COMPARE TO TRUE
+           MOVE NEIGHBOURS TO UT-ACTUAL
+           MOVE 11100000
+                       TO UT-EXPECTED
+           SET UT-COMPARE-DEFAULT TO TRUE
+           PERFORM UT-ASSERT-EQUAL
            PERFORM UT-AFTER
             COPY ZUTZCPD     .
            .
@@ -243,6 +262,17 @@
                   PERFORM VARYING COLIDX FROM 1
                       UNTIL COLIDX > 50
                       PERFORM Collect-Neighbours
+
+                      INITIALIZE ALIVES
+                      INSPECT NEIGHBOURS TALLYING ALIVES FOR ALL "1"
+                      IF ROWIDX = 4 AND COLIDX = 5 THEN
+                       DISPLAY ALIVES
+                       DISPLAY NEIGHBOURS
+                      END-IF
+                      EVALUATE ALIVES
+                      WHEN 3
+                        SET NMALIVE(ROWIDX,COLIDX) TO TRUE
+                      END-EVALUATE
                   END-PERFORM
            END-PERFORM
            MOVE NEXTMATRIX TO MATRIX

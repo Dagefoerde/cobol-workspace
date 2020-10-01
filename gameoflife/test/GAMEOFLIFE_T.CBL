@@ -59,3 +59,12 @@
                SET COLIDX TO 5
                PERFORM Collect-Neighbours
            EXPECT NEIGHBOURS TO BE 00011000
+
+           TESTCASE 'relevant neighbours are found (2)'
+               SET ALIVE(5,4) TO TRUE
+               SET ALIVE(5,5) TO TRUE
+               SET ALIVE(5,6) TO TRUE
+               SET ROWIDX TO 6
+               SET COLIDX TO 5
+               PERFORM Collect-Neighbours
+           EXPECT NEIGHBOURS TO BE 11100000
