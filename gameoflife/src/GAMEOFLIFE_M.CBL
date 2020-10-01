@@ -55,10 +55,18 @@
                       INITIALIZE ALIVES
                       INSPECT NEIGHBOURS TALLYING ALIVES FOR ALL "1"
                           
-                      EVALUATE ALIVES
-                      WHEN 3
-                        SET NMALIVE(ROWIDX,COLIDX) TO TRUE
-                      END-EVALUATE
+                      IF DEAD(ROWIDX,COLIDX) THEN
+                        IF ALIVES = 3
+                          SET NMALIVE(ROWIDX,COLIDX) TO TRUE
+                        END-IF
+                      ELSE 
+                        EVALUATE ALIVES
+                        WHEN < 2
+                          SET NMDEAD(ROWIDX,COLIDX) TO TRUE
+                        WHEN OTHER
+                          SET NMALIVE(ROWIDX,COLIDX) TO TRUE
+                        END-EVALUATE
+                      END-IF
                   END-PERFORM
            END-PERFORM
            MOVE NEXTMATRIX TO MATRIX

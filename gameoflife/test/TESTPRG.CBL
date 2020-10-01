@@ -101,6 +101,56 @@
            PERFORM  UT-ASSERT-EQUAL
 
            PERFORM UT-AFTER
+           MOVE 'alive, zwei lebende Nachbarn -> alive'
+               TO UT-TEST-CASE-NAME
+           PERFORM UT-BEFORE
+               SET ALIVE(5,4) TO TRUE
+               SET ALIVE(5,5) TO TRUE
+               SET ALIVE(6,5) TO TRUE
+               PERFORM Tick
+           ADD 1 TO UT-TEST-CASE-COUNT
+           SET UT-NORMAL-COMPARE TO TRUE
+           MOVE UT-TEST-CASE-COUNT TO UT-TEST-CASE-NUMBER
+           SET UT-COMPARE-DEFAULT TO TRUE
+           IF ALIVE(5,4)
+           MOVE  'TRUE'  TO UT-ACTUAL
+           ELSE
+           MOVE  'FALSE'  TO UT-ACTUAL
+           END-IF
+           MOVE 'TRUE' TO UT-EXPECTED
+           PERFORM  UT-ASSERT-EQUAL
+           ADD 1 TO UT-TEST-CASE-COUNT
+           SET UT-NORMAL-COMPARE TO TRUE
+           MOVE UT-TEST-CASE-COUNT TO UT-TEST-CASE-NUMBER
+           SET UT-COMPARE-DEFAULT TO TRUE
+           IF ALIVE(6,5)
+           MOVE  'TRUE'  TO UT-ACTUAL
+           ELSE
+           MOVE  'FALSE'  TO UT-ACTUAL
+           END-IF
+           MOVE 'TRUE' TO UT-EXPECTED
+           PERFORM  UT-ASSERT-EQUAL
+           PERFORM UT-AFTER
+           MOVE 'alive, ein lebender Nachbar -> dead'
+               TO UT-TEST-CASE-NAME
+           PERFORM UT-BEFORE
+               SET ALIVE(5,4) TO TRUE
+               SET ALIVE(5,5) TO TRUE
+               PERFORM Tick
+           ADD 1 TO UT-TEST-CASE-COUNT
+           SET UT-NORMAL-COMPARE TO TRUE
+           MOVE UT-TEST-CASE-COUNT TO UT-TEST-CASE-NUMBER
+           SET UT-COMPARE-DEFAULT TO TRUE
+           IF DEAD(5,4)
+           MOVE  'TRUE'  TO UT-ACTUAL
+           ELSE
+           MOVE  'FALSE'  TO UT-ACTUAL
+           END-IF
+           MOVE 'TRUE' TO UT-EXPECTED
+           PERFORM  UT-ASSERT-EQUAL
+
+
+           PERFORM UT-AFTER
            MOVE 'Row indexes wrap at upper bound'
                TO UT-TEST-CASE-NAME
            PERFORM UT-BEFORE
@@ -261,18 +311,23 @@
                UNTIL ROWIDX > 50
                   PERFORM VARYING COLIDX FROM 1
                       UNTIL COLIDX > 50
-                      PERFORM Collect-Neighbours
 
+                      PERFORM Collect-Neighbours
                       INITIALIZE ALIVES
                       INSPECT NEIGHBOURS TALLYING ALIVES FOR ALL "1"
-                      IF ROWIDX = 4 AND COLIDX = 5 THEN
-                       DISPLAY ALIVES
-                       DISPLAY NEIGHBOURS
+
+                      IF DEAD(ROWIDX,COLIDX) THEN
+                        IF ALIVES = 3
+                          SET NMALIVE(ROWIDX,COLIDX) TO TRUE
+                        END-IF
+                      ELSE
+                        EVALUATE ALIVES
+                        WHEN < 2
+                          SET NMDEAD(ROWIDX,COLIDX) TO TRUE
+                        WHEN OTHER
+                          SET NMALIVE(ROWIDX,COLIDX) TO TRUE
+                        END-EVALUATE
                       END-IF
-                      EVALUATE ALIVES
-                      WHEN 3
-                        SET NMALIVE(ROWIDX,COLIDX) TO TRUE
-                      END-EVALUATE
                   END-PERFORM
            END-PERFORM
            MOVE NEXTMATRIX TO MATRIX
