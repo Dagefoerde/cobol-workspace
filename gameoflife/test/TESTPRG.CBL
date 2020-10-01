@@ -336,6 +336,7 @@
                PERFORM Tick
            END-PERFORM
 
+
            .
        Init SECTION.
            MOVE ZEROES TO MATRIX

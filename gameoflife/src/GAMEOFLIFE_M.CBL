@@ -31,11 +31,12 @@
        01  ALIVES PIC 9.
        PROCEDURE DIVISION.
        
-           PERFORM Init.
+           PERFORM Init
 
            PERFORM UNTIL 2=1
-               PERFORM Tick.
+               PERFORM Tick
            END-PERFORM
+           .
 
        Init SECTION.
            MOVE ZEROES TO MATRIX
@@ -51,7 +52,7 @@
                   PERFORM VARYING COLIDX FROM 1
                       UNTIL COLIDX > 50
 
-                      PERFORM Collect-Neighbours.
+                      PERFORM Collect-Neighbours
                       INITIALIZE ALIVES
                       INSPECT NEIGHBOURS TALLYING ALIVES FOR ALL "1"
                           
