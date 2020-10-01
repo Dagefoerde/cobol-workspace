@@ -42,7 +42,6 @@
            PERFORM UNTIL 2=1
                PERFORM Tick
                PERFORM Ausgabe
-      *>       Wait
                call "CBL_GC_NANOSLEEP" using "500000000" end-call
            END-PERFORM
            .

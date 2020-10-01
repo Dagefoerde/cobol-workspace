@@ -334,11 +334,14 @@
 
            PERFORM VARYING ROWIDX FROM 1 UNTIL ROWIDX > 50
                ACCEPT MROW(ROWIDX)
+               INSPECT MROW(ROWIDX) REPLACING ALL "0" BY " "
+               INSPECT MROW(ROWIDX) REPLACING ALL "1" BY "O"
            END-PERFORM
 
            PERFORM UNTIL 2=1
                PERFORM Tick
                PERFORM Ausgabe
+               call "CBL_GC_NANOSLEEP" using "500000000" end-call
            END-PERFORM
 
 
@@ -428,6 +431,5 @@
            PERFORM VARYING ROWIDX FROM 1 UNTIL ROWIDX > 50
                DISPLAY MROW(ROWIDX)
            END-PERFORM
-           call "CBL_GC_NANOSLEEP" using "500000000" end-call
 
            .
