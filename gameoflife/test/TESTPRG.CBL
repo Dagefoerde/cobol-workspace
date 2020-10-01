@@ -332,8 +332,13 @@
 
            PERFORM Init
 
+           PERFORM VARYING ROWIDX FROM 1 UNTIL ROWIDX > 50
+               ACCEPT MROW(ROWIDX)
+           END-PERFORM
+
            PERFORM UNTIL 2=1
                PERFORM Tick
+               PERFORM Ausgabe
            END-PERFORM
 
 
@@ -415,5 +420,13 @@
            WHEN 51
                SET NEIGHBORCOLIDX TO 01
            END-EVALUATE
+
+
+           .
+       Ausgabe SECTION.
+           PERFORM VARYING ROWIDX FROM 1 UNTIL ROWIDX > 50
+               DISPLAY MROW(ROWIDX) LINE ROWIDX COLUMN 0
+           END-PERFORM
+           call "CBL_GC_NANOSLEEP" using "500000000" end-call
 
            .
