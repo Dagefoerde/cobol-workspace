@@ -21,9 +21,6 @@
        01  INDEXES.
          05  ROWIDX PIC 99.
          05  COLIDX PIC 99.
-       01  EMPTYMATRIX.
-         05  EMROW OCCURS 50.
-           07  EMCELL OCCURS 50 PIC 9.
        PROCEDURE DIVISION.
        
            PERFORM Init.
@@ -35,7 +32,6 @@
        Init SECTION.
            MOVE ZEROES TO MATRIX
            MOVE ZEROES TO NEXTMATRIX
-           MOVE ZEROES TO EMPTYMATRIX
            INITIALIZE INDEXES
            .
 

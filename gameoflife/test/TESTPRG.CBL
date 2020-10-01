@@ -22,9 +22,6 @@
        01  INDEXES.
          05  ROWIDX PIC 99.
          05  COLIDX PIC 99.
-       01  EMPTYMATRIX.
-         05  EMROW OCCURS 50.
-           07  EMCELL OCCURS 50 PIC 9.
        PROCEDURE DIVISION.
            PERFORM UT-INITIALIZE
 
@@ -43,7 +40,7 @@
            ADD 1 TO UT-TEST-CASE-COUNT
            SET UT-NORMAL-COMPARE TO TRUE
            MOVE MATRIX TO UT-ACTUAL
-           MOVE EMPTYMATRIX
+           MOVE ZEROES
                        TO UT-EXPECTED
            SET UT-COMPARE-DEFAULT TO TRUE
            PERFORM UT-ASSERT-EQUAL
@@ -53,18 +50,18 @@
                TO UT-TEST-CASE-NAME
            PERFORM UT-BEFORE
                MOVE ZEROES TO MATRIX
-               SET ALIVE IN MCELL(5,5) TO TRUE
+               SET ALIVE(5,5) TO TRUE
                PERFORM Tick
            ADD 1 TO UT-TEST-CASE-COUNT
            SET UT-NORMAL-COMPARE TO TRUE
            MOVE UT-TEST-CASE-COUNT TO UT-TEST-CASE-NUMBER
            SET UT-COMPARE-DEFAULT TO TRUE
-           IF DEAD
+           IF DEAD(5,5)
            MOVE  'TRUE'  TO UT-ACTUAL
            ELSE
            MOVE  'FALSE'  TO UT-ACTUAL
            END-IF
-           MOVE 'FALSE' TO UT-EXPECTED
+           MOVE 'TRUE' TO UT-EXPECTED
            PERFORM  UT-ASSERT-EQUAL
            PERFORM UT-AFTER
             COPY ZUTZCPD     .
@@ -93,7 +90,6 @@
        Init SECTION.
            MOVE ZEROES TO MATRIX
            MOVE ZEROES TO NEXTMATRIX
-           MOVE ZEROES TO EMPTYMATRIX
            INITIALIZE INDEXES
 
 
