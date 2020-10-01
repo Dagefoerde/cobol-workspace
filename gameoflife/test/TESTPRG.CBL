@@ -9,16 +9,8 @@
        DATA DIVISION.
        WORKING-STORAGE SECTION.
             COPY ZUTZCWS     .
-       01  MATRIX.
-         05  MROW OCCURS 50.
-           07  MCELL OCCURS 50 PIC X.
-             88  ALIVE VALUE "O".
-             88  DEAD  VALUE SPACE.
-       01  NEXTMATRIX.
-         05  NMROW OCCURS 50.
-           07  NMCELL OCCURS 50 PIC X.
-             88  NMALIVE VALUE "O".
-             88  NMDEAD  VALUE SPACE.
+           COPY 'matrix.cpy' REPLACING ==TAG-== BY ====.
+           COPY 'matrix.cpy' REPLACING ==TAG-== BY ==NM==.
        01  INDEXES.
          05  ROWIDX PIC 99.
          05  COLIDX PIC 99.
@@ -338,7 +330,7 @@
                INSPECT MROW(ROWIDX) REPLACING ALL "1" BY "O"
            END-PERFORM
 
-           PERFORM UNTIL 2=1
+           PERFORM FOREVER
                PERFORM Tick
                PERFORM Ausgabe
                call "CBL_GC_NANOSLEEP" using "500000000" end-call
@@ -348,13 +340,13 @@
            .
        Init SECTION.
            MOVE SPACES TO MATRIX
-           MOVE SPACES TO NEXTMATRIX
+           MOVE SPACES TO NMMATRIX
            INITIALIZE INDEXES
 
 
            .
        Tick SECTION.
-           MOVE SPACES TO NEXTMATRIX
+           MOVE SPACES TO NMMATRIX
            INITIALIZE INDEXES
            PERFORM VARYING ROWIDX FROM 1
                UNTIL ROWIDX > 50
@@ -381,7 +373,7 @@
                       END-IF
                   END-PERFORM
            END-PERFORM
-           MOVE NEXTMATRIX TO MATRIX
+           MOVE NMMATRIX TO MATRIX
 
 
            .
