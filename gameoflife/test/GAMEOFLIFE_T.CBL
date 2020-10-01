@@ -6,7 +6,7 @@
 
            TESTCASE 'Tick from all 0 results in all 0'
                PERFORM Tick
-           EXPECT MATRIX TO BE ZEROES
+           EXPECT MATRIX TO BE SPACES
 
            TESTCASE 'Single cell dies'
                SET ALIVE(5,5) TO TRUE
@@ -92,7 +92,7 @@
                SET ROWIDX TO 5
                SET COLIDX TO 5
                PERFORM Collect-Neighbours
-           EXPECT NEIGHBOURS TO BE 00011000
+           EXPECT NEIGHBOURS TO BE "   OO   "
 
            TESTCASE 'relevant neighbours are found (2)'
                SET ALIVE(5,4) TO TRUE
@@ -101,4 +101,4 @@
                SET ROWIDX TO 6
                SET COLIDX TO 5
                PERFORM Collect-Neighbours
-           EXPECT NEIGHBOURS TO BE 11100000
+           EXPECT NEIGHBOURS TO BE "OOO     "

@@ -10,14 +10,14 @@
        WORKING-STORAGE SECTION.
        01  MATRIX.
          05  MROW OCCURS 50.
-           07  MCELL OCCURS 50 PIC 9.
-             88  ALIVE VALUE 1.
-             88  DEAD  VALUE 0.
+           07  MCELL OCCURS 50 PIC X.
+             88  ALIVE VALUE "O".
+             88  DEAD  VALUE SPACE.
        01  NEXTMATRIX.
          05  NMROW OCCURS 50.
-           07  NMCELL OCCURS 50 PIC 9.
-             88  NMALIVE VALUE 1.
-             88  NMDEAD  VALUE 0.
+           07  NMCELL OCCURS 50 PIC X.
+             88  NMALIVE VALUE "O".
+             88  NMDEAD  VALUE SPACE.
        01  INDEXES.
          05  ROWIDX PIC 99.
          05  COLIDX PIC 99.
@@ -26,7 +26,7 @@
          05  ROWDIFF PIC 99.
          05  COLDIFF PIC 99.
        01 NEIGHBOURS.
-         05  NEIGHBOUR PIC 9 OCCURS 8.
+         05  NEIGHBOUR PIC X OCCURS 8.
        01  NEIGHBOURSIDX PIC 9.
        01  ALIVES PIC 9.
        PROCEDURE DIVISION.
@@ -35,6 +35,8 @@
 
            PERFORM VARYING ROWIDX FROM 1 UNTIL ROWIDX > 50
                ACCEPT MROW(ROWIDX)
+               INSPECT MROW(ROWIDX) REPLACING ALL "0" BY " "
+               INSPECT MROW(ROWIDX) REPLACING ALL "1" BY "O"
            END-PERFORM
 
            PERFORM UNTIL 2=1
@@ -44,13 +46,13 @@
            .
 
        Init SECTION.
-           MOVE ZEROES TO MATRIX
-           MOVE ZEROES TO NEXTMATRIX
+           MOVE SPACES TO MATRIX
+           MOVE SPACES TO NEXTMATRIX
            INITIALIZE INDEXES
            .
 
        Tick SECTION.
-           MOVE ZEROES TO NEXTMATRIX
+           MOVE SPACES TO NEXTMATRIX
            INITIALIZE INDEXES
            PERFORM VARYING ROWIDX FROM 1
                UNTIL ROWIDX > 50  
@@ -59,7 +61,7 @@
 
                       PERFORM Collect-Neighbours
                       INITIALIZE ALIVES
-                      INSPECT NEIGHBOURS TALLYING ALIVES FOR ALL "1"
+                      INSPECT NEIGHBOURS TALLYING ALIVES FOR ALL "O"
                           
                       IF DEAD(ROWIDX,COLIDX) THEN
                         IF ALIVES = 3
@@ -120,8 +122,9 @@
            .
 
        Ausgabe SECTION.
+           CALL 'SYSTEM' USING 'clear'
            PERFORM VARYING ROWIDX FROM 1 UNTIL ROWIDX > 50
-               DISPLAY MROW(ROWIDX) LINE ROWIDX COLUMN 0
+               DISPLAY MROW(ROWIDX)
            END-PERFORM
            call "CBL_GC_NANOSLEEP" using "500000000" end-call
            .
