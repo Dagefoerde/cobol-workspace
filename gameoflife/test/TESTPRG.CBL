@@ -26,6 +26,9 @@
          05  NEIGHBORCOLIDX PIC 99.
          05  ROWDIFF PIC 99.
          05  COLDIFF PIC 99.
+       01 NEIGHBOURS.
+         05  NEIGHBOUR PIC 9 OCCURS 8.
+       01  NEIGHBOURSIDX PIC 9.
        PROCEDURE DIVISION.
            PERFORM UT-INITIALIZE
 
@@ -183,6 +186,24 @@
                        TO UT-EXPECTED
            SET UT-COMPARE-DEFAULT TO TRUE
            PERFORM UT-ASSERT-EQUAL
+
+           PERFORM UT-AFTER
+           MOVE 'relevant neighbours are found'
+               TO UT-TEST-CASE-NAME
+           PERFORM UT-BEFORE
+               SET ALIVE(5,4) TO TRUE
+               SET ALIVE(5,5) TO TRUE
+               SET ALIVE(5,6) TO TRUE
+               SET ROWIDX TO 5
+               SET COLIDX TO 5
+               PERFORM Check-Cell
+           ADD 1 TO UT-TEST-CASE-COUNT
+           SET UT-NORMAL-COMPARE TO TRUE
+           MOVE NEIGHBOURS TO UT-ACTUAL
+           MOVE 00011000
+                       TO UT-EXPECTED
+           SET UT-COMPARE-DEFAULT TO TRUE
+           PERFORM UT-ASSERT-EQUAL
            PERFORM UT-AFTER
             COPY ZUTZCPD     .
            .
@@ -229,13 +250,22 @@
 
            .
        Check-Cell SECTION.
-           PERFORM VARYING ROWDIFF FROM -1
-               UNTIL ROWDIFF > 1
-               PERFORM VARYING COLDIFF FROM -1
-                   UNTIL COLDIFF > 1
-                   COMPUTE NEIGHBORROWIDX = ROWIDX + ROWDIFF
-                   COMPUTE NEIGHBORCOLIDX = COLIDX + COLDIFF
-                   PERFORM Fix-Neighbor-Indexes
+           INITIALIZE NEIGHBOURS
+           INITIALIZE NEIGHBOURSIDX
+           PERFORM VARYING ROWDIFF FROM 0
+               UNTIL ROWDIFF > 2
+               PERFORM VARYING COLDIFF FROM 0
+                   UNTIL COLDIFF > 2
+                   COMPUTE NEIGHBORROWIDX = ROWIDX + ROWDIFF - 1
+                   COMPUTE NEIGHBORCOLIDX = COLIDX + COLDIFF - 1
+                   IF NEIGHBORCOLIDX NOT = COLIDX
+                       OR NEIGHBORROWIDX NOT = ROWIDX
+                   THEN
+                       ADD 1 TO NEIGHBOURSIDX
+                       PERFORM Fix-Neighbor-Indexes
+                       MOVE MCELL(NEIGHBORROWIDX,NEIGHBORCOLIDX)
+                           TO NEIGHBOUR(NEIGHBOURSIDX)
+                   END-IF
 
                END-PERFORM
            END-PERFORM

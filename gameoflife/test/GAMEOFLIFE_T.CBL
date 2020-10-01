@@ -50,3 +50,12 @@
                PERFORM Fix-Neighbor-Indexes
            EXPECT NEIGHBORROWIDX TO BE 01
            EXPECT NEIGHBORCOLIDX TO BE 50
+
+           TESTCASE 'relevant neighbours are found'
+               SET ALIVE(5,4) TO TRUE
+               SET ALIVE(5,5) TO TRUE
+               SET ALIVE(5,6) TO TRUE
+               SET ROWIDX TO 5
+               SET COLIDX TO 5
+               PERFORM Check-Cell
+           EXPECT NEIGHBOURS TO BE 00011000
