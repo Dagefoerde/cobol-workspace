@@ -49,13 +49,13 @@
                UNTIL ROWIDX > 50  
                   PERFORM VARYING COLIDX FROM 1
                       UNTIL COLIDX > 50
-                      PERFORM Check-Cell.
+                      PERFORM Collect-Neighbours.
                   END-PERFORM
            END-PERFORM
            MOVE NEXTMATRIX TO MATRIX
            .
 
-       Check-Cell SECTION.
+       Collect-Neighbours SECTION.
            INITIALIZE NEIGHBOURS.
            INITIALIZE NEIGHBOURSIDX.
            PERFORM VARYING ROWDIFF FROM 0

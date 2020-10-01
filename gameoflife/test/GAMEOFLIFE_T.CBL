@@ -57,5 +57,5 @@
                SET ALIVE(5,6) TO TRUE
                SET ROWIDX TO 5
                SET COLIDX TO 5
-               PERFORM Check-Cell
+               PERFORM Collect-Neighbours
            EXPECT NEIGHBOURS TO BE 00011000

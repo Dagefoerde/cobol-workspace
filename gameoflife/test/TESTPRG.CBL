@@ -196,7 +196,7 @@
                SET ALIVE(5,6) TO TRUE
                SET ROWIDX TO 5
                SET COLIDX TO 5
-               PERFORM Check-Cell
+               PERFORM Collect-Neighbours
            ADD 1 TO UT-TEST-CASE-COUNT
            SET UT-NORMAL-COMPARE TO TRUE
            MOVE NEIGHBOURS TO UT-ACTUAL
@@ -242,14 +242,14 @@
                UNTIL ROWIDX > 50
                   PERFORM VARYING COLIDX FROM 1
                       UNTIL COLIDX > 50
-                      PERFORM Check-Cell
+                      PERFORM Collect-Neighbours
                   END-PERFORM
            END-PERFORM
            MOVE NEXTMATRIX TO MATRIX
 
 
            .
-       Check-Cell SECTION.
+       Collect-Neighbours SECTION.
            INITIALIZE NEIGHBOURS
            INITIALIZE NEIGHBOURSIDX
            PERFORM VARYING ROWDIFF FROM 0
